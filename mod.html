@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Catch Board Moderation · Gulf Coast Bite</title>
+<style>
+body{font-family:Georgia,serif;background:#f2ece1;color:#102a3a;margin:0;padding:32px;max-width:860px;margin-inline:auto}
+h1{font-size:26px;margin:0 0 4px}
+h2{font-size:15px;letter-spacing:.1em;text-transform:uppercase;margin:28px 0 4px;border-bottom:1px solid #102a3a33;padding-bottom:6px}
+.sub{opacity:.7;font-size:14px;margin-bottom:22px}
+input[type=password]{width:100%;padding:10px;border:1px solid #102a3a44;border-radius:6px;font-size:14px;box-sizing:border-box}
+label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;display:block;margin-bottom:6px}
+.card{background:#faf6ee;border:1px solid #102a3a22;border-radius:10px;padding:16px;margin-top:14px;display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.card img{width:130px;height:98px;object-fit:cover;border-radius:6px;flex:none}
+.card h3{margin:0 0 4px;font-size:18px}
+.meta{font-size:12px;letter-spacing:.05em;text-transform:uppercase;opacity:.65;margin-bottom:6px}
+.note{font-style:italic;font-size:14px;margin:0}
+.grow{flex:1;min-width:200px}
+.btns{display:flex;gap:8px;flex:none}
+button{border:0;border-radius:6px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer}
+button:disabled{opacity:.5}
+.ok{background:#2c6e49;color:#fff}
+.bad{background:#b83a2c;color:#fff}
+#pstatus,#lstatus{margin-top:10px;font-size:14px;opacity:.75}
+</style>
+</head>
+<body>
+<h1>Catch board moderation</h1>
+<p class="sub">Unlisted page. New shared catches wait here (you also get an email with one-click links). Nothing shows publicly until you approve it.</p>
+<label for="key">Moderator key</label>
+<input id="key" type="password" placeholder="Paste your moderator key" autocomplete="off">
+<h2>Waiting for approval</h2>
+<div id="pstatus">Paste your key to load the queue.</div>
+<div id="pending"></div>
+<h2>Live on the board</h2>
+<div id="lstatus">Loading…</div>
+<div id="live"></div>
+<script>
+var API='/.netlify/functions/catches';
+var keyEl=document.getElementById('key');
+try{var saved=localStorage.getItem('gcb-mod-key');if(saved){keyEl.value=saved}}catch(e){}
+keyEl.addEventListener('change',function(){try{localStorage.setItem('gcb-mod-key',keyEl.value)}catch(e){};loadPending()});
+function esc(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function card(c,btnsHtml){
+var when=new Date(c.at);
+return '<div class="card">'+(c.hasPhoto?'<img alt="" src="'+API+'?img='+encodeURIComponent(c.id)+'">':'')+
+'<div class="grow"><div class="meta">'+esc((when.getMonth()+1)+'/'+when.getDate())+' · '+esc(c.name)+' · '+esc(c.region||'')+(c.water?' · '+esc(c.water):'')+'</div>'+
+'<h3>'+esc(c.species)+(c.length&&c.length!=='—'?' · '+esc(c.length)+' in':'')+'</h3>'+
+(c.note?'<p class="note">“'+esc(c.note)+'”</p>':'')+'</div>'+
+'<div class="btns">'+btnsHtml.replace(/__ID__/g,esc(c.id))+'</div></div>';
+}
+function loadPending(){
+var k=keyEl.value.trim();
+var st=document.getElementById('pstatus');
+if(!k){st.textContent='Paste your key to load the queue.';return}
+fetch(API+'?pending=1',{cache:'no-store',headers:{'x-mod-key':k}}).then(function(r){if(r.status===403)throw new Error('key');return r.json()}).then(function(j){
+var cs=j.catches||[];
+st.textContent=cs.length?cs.length+' waiting.':'Queue is empty.';
+document.getElementById('pending').innerHTML=cs.map(function(c){return card(c,'<button class="ok" data-act="approve" data-id="__ID__">Approve</button><button class="bad" data-act="reject" data-id="__ID__">Reject</button>')}).join('');
+}).catch(function(e){st.textContent=e.message==='key'?'Wrong key.':'Could not load the queue.'});
+}
+function loadLive(){
+fetch(API,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
+var cs=j.catches||[];
+document.getElementById('lstatus').textContent=cs.length?cs.length+' live.':'Nothing live on the board.';
+document.getElementById('live').innerHTML=cs.map(function(c){return card(c,'<button class="bad" data-act="remove" data-id="__ID__">Remove</button>')}).join('');
+}).catch(function(){document.getElementById('lstatus').textContent='Could not load the board.'});
+}
+document.body.addEventListener('click',function(e){
+var b=e.target.closest('button[data-act]');
+if(!b)return;
+var k=keyEl.value.trim();
+if(!k){alert('Paste your moderator key first.');return}
+var act=b.getAttribute('data-act'), id=b.getAttribute('data-id');
+if((act==='reject'||act==='remove')&&!confirm('Delete this submission permanently?'))return;
+b.disabled=true;
+var req;
+if(act==='approve')req=fetch(API+'?approve='+encodeURIComponent(id)+'&key='+encodeURIComponent(k));
+else if(act==='reject')req=fetch(API+'?reject='+encodeURIComponent(id)+'&key='+encodeURIComponent(k));
+else req=fetch(API+'?id='+encodeURIComponent(id),{method:'DELETE',headers:{'x-mod-key':k}});
+req.then(function(){loadPending();loadLive()}).catch(function(){b.disabled=false;alert('Action failed.')});
+});
+loadPending();loadLive();
+setInterval(function(){loadPending();loadLive()},30000);
+</script>
+</body>
+</html>

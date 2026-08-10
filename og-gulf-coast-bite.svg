@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="Gulf Coast Bite local fishing conditions">
+  <rect width="1200" height="630" fill="#f3ebdd"/>
+  <path d="M0 0h1200v630H0z" fill="none" stroke="#102a3a" stroke-width="18"/>
+  <path d="M55 505c105-48 186 48 291 0s187 44 298 0 199 41 305 0 142 18 196 0" fill="none" stroke="#df5b43" stroke-width="12" stroke-linecap="round"/>
+  <g transform="translate(70 92)">
+    <circle cx="170" cy="170" r="158" fill="#fbf6ec"/>
+    <circle cx="170" cy="170" r="143" fill="none" stroke="#102a3a" stroke-width="10" stroke-dasharray="14 8"/>
+    <path d="M105 165 52 106l18 66-18 53 58-44c60 42 151 46 218-9-61-49-157-48-218-12Z" fill="#89a9a6" fill-opacity=".42" stroke="#102a3a" stroke-width="10" stroke-linejoin="round"/>
+    <path d="m151 129 38 34m-33 48 40-43" fill="none" stroke="#df5b43" stroke-width="11" stroke-linecap="round"/>
+    <circle cx="275" cy="145" r="15" fill="#df5b43"/>
+    <circle cx="310" cy="151" r="7" fill="#102a3a"/>
+  </g>
+  <text x="455" y="222" fill="#102a3a" font-family="Georgia, 'Times New Roman', serif" font-size="82" font-weight="700">Gulf Coast Bite</text>
+  <text x="460" y="286" fill="#df5b43" font-family="Arial, sans-serif" font-size="25" font-weight="700" letter-spacing="7">LOCAL FISHING CONDITIONS</text>
+  <text x="460" y="365" fill="#102a3a" font-family="Georgia, 'Times New Roman', serif" font-size="37">Bite scores · Tides · Wind · Waves</text>
+  <text x="460" y="420" fill="#102a3a" font-family="Georgia, 'Times New Roman', serif" font-size="29" opacity=".72">Pensacola to Mobile Bay</text>
+</svg>
+

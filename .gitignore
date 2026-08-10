@@ -1,0 +1,14 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Netlify local
+.netlify/
+node_modules/
+
+# Env / secrets — never commit
+.env
+.env.*

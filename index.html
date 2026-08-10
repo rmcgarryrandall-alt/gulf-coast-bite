@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gulf Coast Bite | Local Fishing Conditions</title>
+    <meta name="description" content="Live fishing conditions, tides, and solunar periods for Pensacola, Perdido Key, Orange Beach, Gulf Shores, Mobile Bay, and Dauphin Island.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="author" content="R. McGarry CO.">
+    <meta name="theme-color" content="#f3ebdd">
+    <link rel="canonical" href="https://gulfcoastbite.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Gulf Coast Bite">
+    <meta property="og:title" content="Gulf Coast Bite | Local Fishing Conditions">
+    <meta property="og:description" content="Live bite scores, tides, solunar periods, wind, waves, fishing spots, bait shops, and regulations from Pensacola to Dauphin Island.">
+    <meta property="og:url" content="https://gulfcoastbite.com/">
+    <meta property="og:image" content="https://gulfcoastbite.com/og-gulf-coast-bite.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Gulf Coast Bite redfish logo and local fishing conditions">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Gulf Coast Bite | Local Fishing Conditions">
+    <meta name="twitter:description" content="Live fishing conditions, tides, and daily solunar periods from Pensacola and Perdido Key to Gulf Shores, Mobile Bay, and Dauphin Island.">
+    <meta name="twitter:image" content="https://gulfcoastbite.com/og-gulf-coast-bite.png">
+    <link rel="icon" href="/favicon.ico?v=20260713-3" sizes="any">
+    <link rel="icon" href="/favicon.svg?v=20260713-3" type="image/svg+xml">
+    <link rel="stylesheet" href="/styles.css?v=20260810-1">
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://gulfcoastbite.com/#organization","name":"R. McGarry CO.","url":"https://gulfcoastbite.com/","brand":{"@type":"Brand","name":"Gulf Coast Bite","logo":"https://gulfcoastbite.com/favicon.svg"},"email":"r.mcgarryrandall@gmail.com","sameAs":["https://www.facebook.com/thegulfcoastbite","https://www.instagram.com/thegulfcoastbite/"]},{"@type":"WebSite","@id":"https://gulfcoastbite.com/#website","url":"https://gulfcoastbite.com/","name":"Gulf Coast Bite","description":"Local fishing conditions, bite forecasts, tides, solunar periods, bait shops, and regulations for the western Florida Panhandle and coastal Alabama.","publisher":{"@id":"https://gulfcoastbite.com/#organization"},"inLanguage":"en-US"},{"@type":"WebPage","@id":"https://gulfcoastbite.com/#webpage","url":"https://gulfcoastbite.com/","name":"Gulf Coast Bite | Local Fishing Conditions","isPartOf":{"@id":"https://gulfcoastbite.com/#website"},"about":[{"@type":"Place","name":"Perdido Key, Florida"},{"@type":"Place","name":"Pensacola Bay, Florida"},{"@type":"Place","name":"East Bay, Florida"},{"@type":"Place","name":"Santa Rosa Sound, Florida"},{"@type":"Place","name":"Orange Beach, Alabama"},{"@type":"Place","name":"Mobile Bay, Alabama"}],"dateModified":"2026-08-10","inLanguage":"en-US"}]}
+    </script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gcbLoadAnalytics = function () {
+        if (window.gcbAnalyticsLoaded) return;
+        window.gcbAnalyticsLoaded = true;
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-L4CB6NXZ6Y';
+        document.head.appendChild(script);
+        gtag('js', new Date());
+        gtag('config', 'G-L4CB6NXZ6Y', {
+          allow_google_signals: false,
+          allow_ad_personalization_signals: false
+        });
+      };
+      if (localStorage.getItem('gcb-analytics-consent') === 'accepted') window.gcbLoadAnalytics();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#conditions">Skip to conditions</a>
+    <main>
+      <header class="site-header" id="page-top">
+        <a class="brand" href="#page-top" aria-label="Gulf Coast Bite home">
+          <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 74 74"><circle class="brand-paper" cx="37" cy="37" r="34"/><circle class="brand-ring" cx="37" cy="37" r="30"/><path class="brand-fish" d="M23 38 14 28l3 11-3 9 10-7c11 7 27 8 39-2-11-8-28-8-39-2Z"/><path class="brand-fin" d="m32 33 6 5m-5 7 6-6"/><circle class="brand-spot" cx="53" cy="35" r="2.5"/><circle class="brand-eye" cx="59" cy="36" r="1.1"/><path class="brand-wave" d="M19 51c7-4 14 4 21 0s12 3 17 0"/></svg></span>
+          <span>Gulf Coast Bite</span>
+        </a>
+        <nav aria-label="Primary navigation">
+          <a class="active" href="#conditions">Conditions</a>
+          <a href="#tides">Tides</a>
+          <a href="#spots">Spots</a>
+          <a href="#bait-shops">Live Bait</a>
+          <a href="#journal">Journal</a>
+        </nav>
+        <div class="location-lockup">
+          <span class="pin" aria-hidden="true">⌖</span>
+          <span><b id="header-date">Today</b><span id="header-location">Perdido Key, FL</span></span>
+        </div>
+      </header>
+
+      <div class="region-bar" aria-label="Choose local water">
+        <span>Pensacola to Dauphin Island</span>
+        <div id="location-controls"></div>
+      </div>
+
+      <section class="day-strip" aria-label="Forecast day" aria-live="polite">
+        <div class="day-buttons" id="day-buttons"></div>
+        <p id="data-status"><span class="live-dot"></span> Fetching live conditions…</p>
+      </section>
+
+      <section class="hero-grid">
+        <article class="bite-panel" id="conditions">
+          <h1 class="site-title">Gulf Coast fishing conditions &amp; bite forecast</h1>
+          <p class="eyebrow" id="hero-meta">Today · Perdido Key, FL</p>
+          <h2 id="verdict" aria-live="polite"><span>Good water.</span><span>Early bite.</span></h2>
+          <div class="score-row">
+            <div class="score-ring" id="score-ring" aria-label="Bite score 82 out of 100">
+              <div><small class="score-label">Bite score</small><strong id="bite-score">82</strong><span>/ 100</span></div>
+            </div>
+            <div class="window-copy">
+              <span>Current bite</span>
+              <strong id="best-window">Best window · 7:30–10:30 AM</strong>
+              <div class="bite-factors" id="bite-factors" aria-label="Bite score factors"></div>
+              <button type="button" class="score-help-link" data-open-score>How is this calculated?</button>
+              <button type="button" class="primary-button" data-open-catch>Log a catch <span>→</span></button>
+            </div>
+          </div>
+        </article>
+
+        <article class="conditions-panel" id="tides">
+          <div class="section-heading">
+            <span>Current conditions</span>
+            <span class="condition-actions"><span class="status-pill" id="report-status">Loading</span><button class="refresh-button" id="refresh-conditions" type="button" aria-label="Refresh live conditions" title="Refresh live conditions">↻</button></span>
+          </div>
+          <div class="marine-alert" id="marine-alert" role="alert" hidden></div>
+          <div class="metrics">
+            <div><span class="metric-icon"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M17 8a3 3 0 0 1 6 0v17a7 7 0 1 1-6 0V8Z"/><path d="M20 13v15"/><circle cx="20" cy="31" r="2.8"/></svg></span><strong id="air-temp">—°F</strong><small>Air</small></div>
+            <div><span class="metric-icon"><svg viewBox="0 0 52 40" aria-hidden="true"><path d="M4 15h28c8 0 8-10 2-10-3 0-5 2-5 4M4 21h40c7 0 7 10 1 10-3 0-5-2-5-4M4 27h23"/></svg></span><strong id="wind-speed">— <i>mph</i></strong><small>Wind</small></div>
+            <div><span class="metric-icon"><svg viewBox="0 0 52 40" aria-hidden="true"><path d="M3 13c4 4 8 4 12 0 4 4 8 4 12 0 4 4 8 4 12 0 4 4 8 4 12 0M3 21c4 4 8 4 12 0 4 4 8 4 12 0 4 4 8 4 12 0 4 4 8 4 12 0M3 29c4 4 8 4 12 0 4 4 8 4 12 0 4 4 8 4 12 0 4 4 8 4 12 0"/></svg></span><strong id="water-temp">—°F</strong><small>Water</small></div>
+            <div><span class="metric-icon"><svg viewBox="0 0 48 40" aria-hidden="true"><path d="M24 31V6m0 0-8 9m8-9 8 9M5 27c4 4 8 4 12 0 4 4 8 4 12 0 4 4 8 4 12 0M8 34c4 3 8 3 12 0 4 3 8 3 12 0 3 2 6 3 9 1"/></svg></span><strong id="high-tide-time">—</strong><small>High tide</small></div>
+            <div><span class="metric-icon"><svg viewBox="0 0 52 40" aria-hidden="true"><path d="M3 18c5-8 10-8 15 0s10 8 15 0 10-8 16-1M3 28h46"/></svg></span><strong class="wave-value" id="wave-height">— <i>ft</i></strong><small>Offshore waves</small></div>
+            <div><span class="metric-icon"><svg viewBox="0 0 48 40" aria-hidden="true"><path d="M24 6v25m0 0-8-9m8 9 8-9M5 11c4 4 8 4 12 0 4 4 8 4 12 0 4 4 8 4 12 0"/></svg></span><strong id="low-tide-time">—</strong><small>Low tide</small></div>
+            <div><span class="metric-icon moon-icon" id="moon-icon">🌓</span><strong class="moon-value" id="moon-phase">—</strong><small>Moon phase</small></div>
+            <div><span class="metric-icon"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M8 26a12 12 0 1 1 24 0"/><path d="M20 26l7-5"/><circle cx="20" cy="26" r="1.6"/></svg></span><strong id="baro-pressure">—</strong><small id="baro-label">Pressure</small></div>
+          </div>
+          <div class="tide-head"><span id="tide-station-label">Perdido Pass tide</span><b id="tide-event-label">—</b></div>
+          <div class="tide-chart" aria-label="Tide curve from midnight to midnight">
+            <svg viewBox="0 0 660 184" role="img" aria-labelledby="tide-title">
+              <title id="tide-title">Twenty-four hour tide curve</title>
+              <g class="grid-lines">
+                <path d="M10 28H650 M10 70H650 M10 112H650 M10 154H650"></path>
+                <path d="M10 20V158 M170 20V158 M330 20V158 M490 20V158 M650 20V158"></path>
+              </g>
+              <path class="tide-fill" id="tide-fill" d="M10 114 C82 164 114 172 188 82 S318 6 384 74 S510 170 646 88 L646 158 L10 158 Z"></path>
+              <path class="tide-line" id="tide-line" d="M10 114 C82 164 114 172 188 82 S318 6 384 74 S510 170 646 88"></path>
+              <line class="tide-marker" id="tide-marker" x1="340" y1="21" x2="340" y2="158"></line>
+              <circle class="tide-dot" id="tide-dot" cx="340" cy="39" r="6"></circle>
+            </svg>
+            <div class="chart-times" aria-hidden="true"><span>12 AM</span><span>6 AM</span><span>12 PM</span><span>6 PM</span><span>12 AM</span></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="solunar-section" id="solunar" aria-labelledby="solunar-title">
+        <div class="solunar-heading">
+          <div><p class="eyebrow">Moon-driven timing</p><h2 id="solunar-title">Solunar periods.</h2></div>
+          <p id="solunar-summary">Calculating today’s major and minor feeding windows…</p>
+        </div>
+        <div class="solunar-periods" id="solunar-periods" aria-live="polite" aria-busy="true">
+          <article class="solunar-period major"><span>Major period</span><strong>—</strong><small>Moon transit</small></article>
+          <article class="solunar-period major"><span>Major period</span><strong>—</strong><small>Moon transit</small></article>
+          <article class="solunar-period minor"><span>Minor period</span><strong>—</strong><small>Moonrise or moonset</small></article>
+          <article class="solunar-period minor"><span>Minor period</span><strong>—</strong><small>Moonrise or moonset</small></article>
+        </div>
+        <div class="solunar-foot"><span id="solunar-location">Local astronomical calculation</span><a href="/methodology#solunar-periods">How these periods are calculated →</a></div>
+      </section>
+
+      <section class="lower-grid">
+        <article class="target-card">
+          <div class="section-heading"><span>Target today</span></div>
+          <div class="fish-stamp" id="target-fish-icon" aria-hidden="true"></div>
+          <div><h2 id="target-species">Redfish</h2><p id="target-bait">Live shrimp · gold spoon</p><p class="target-why" id="target-why"></p><small class="target-backup" id="target-backup"></small></div>
+        </article>
+
+        <article class="water-card" id="spots">
+          <div class="section-heading"><span>Local water</span></div>
+          <div class="spot-list" id="spot-list"></div>
+          <div class="spot-detail" id="spot-detail" aria-live="polite"></div>
+        </article>
+
+        <article class="journal-card" id="journal">
+          <div class="section-heading"><span>Field journal</span></div>
+          <div class="journal-note">
+            <span class="field-icon field-journal-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64">
+                <path class="field-paper" d="M9.5 17.5c7-2.2 14.7-1.2 22.5 3.1 7.8-4.3 15.5-5.3 22.5-3.1v32.2c-7-2.1-14.6-.8-22.5 3.7-7.9-4.5-15.5-5.8-22.5-3.7Z"/>
+                <path d="M32 20.6v32.1M14.8 25.1c4.2-.3 8.2.5 12 2.4M14.8 31.5c4.1-.2 8.1.6 12 2.4M14.8 38c3.7-.1 7.3.6 10.8 2.1M37.4 27.2c4.1-1.8 8-2.6 11.8-2.2M37.4 33.8c3.9-1.7 7.8-2.4 11.8-2M37.4 40.3c3.5-1.5 7-2.1 10.6-1.8"/>
+                <path class="field-accent" d="M38.2 46.1c3.3-1.3 6.6-1.8 9.8-1.4"/>
+              </svg>
+            </span>
+            <div><blockquote id="field-note" aria-live="polite">“Moving water around the pass. Work oyster edges and shaded docks.”</blockquote><p id="field-note-source">— Loading today’s live field note…</p></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="livelook-section" id="livelook" aria-label="Live beach camera" hidden>
+        <article>
+          <div class="section-heading"><span id="livelook-label">Live look</span></div>
+          <div class="livelook-media" id="livelook-media"></div>
+          <small class="livelook-attr" id="livelook-attr"></small>
+        </article>
+      </section>
+
+      <section class="regulations-section" id="limits" aria-labelledby="limits-heading">
+        <div class="regulations-heading">
+          <div><p class="eyebrow">Keep it legal</p><h2 id="limits-heading">Size &amp; catch limits.</h2></div>
+          <span class="regulations-state" id="regulations-state">Florida Panhandle</span>
+        </div>
+        <p class="regulations-warning"><strong>Verify before you keep a fish.</strong> Regulations, seasons, emergency closures, state-water boundaries, and federal rules change often. This quick reference is not a substitute for the official state regulations.</p>
+        <div class="regulations-list" id="regulations-list"></div>
+        <div class="regulations-foot"><span><b>TL</b> total length · <b>FL</b> fork length · daily limits are per person unless noted</span><a id="regulations-link" href="https://myfwc.com/fishing/saltwater/recreational/" target="_blank" rel="noopener">Verify with Florida FWC ↗</a></div>
+      </section>
+
+      <section class="season-watch" id="season-watch" aria-labelledby="season-watch-title">
+        <div class="season-heading">
+          <div><p class="eyebrow">Season watch</p><h2 id="season-watch-title">What the calendar says.</h2></div>
+          <span class="season-month" id="season-watch-month">This month on the water</span>
+        </div>
+        <div id="season-watch-content"></div>
+      </section>
+
+      <section class="bait-directory" id="bait-shops" aria-labelledby="bait-heading">
+        <div class="directory-heading">
+          <div><p class="eyebrow">Before you launch</p><h2 id="bait-heading">Live bait nearby.</h2></div>
+          <p>Call ahead—shrimp, croaker, and minnows can sell out before breakfast.</p>
+        </div>
+        <div class="shop-list" id="shop-list"></div>
+      </section>
+
+      <section class="catch-ledger" aria-labelledby="catch-ledger-heading">
+        <div class="ledger-heading">
+          <div><p class="eyebrow">Your field log</p><h2 id="catch-ledger-heading">Catch ledger</h2></div>
+          <button type="button" data-open-catch>+ Add a catch</button>
+        </div>
+        <div id="catch-content"></div>
+      </section>
+
+      <section class="catch-ledger community-board" id="catch-board" aria-labelledby="board-heading">
+        <div class="ledger-heading">
+          <div><p class="eyebrow">Shared by local anglers</p><h2 id="board-heading">Community catch board</h2></div>
+          <button type="button" data-open-catch>Share a catch</button>
+        </div>
+        <div class="catch-week" id="catch-week" hidden></div>
+        <div id="board-list" class="catch-list"></div>
+        <p id="board-empty" class="board-empty" hidden>No shared catches yet. Log a catch and check “Share to the public catch board” to put the first fish up.</p>
+        <small class="board-foot">Catches are shared voluntarily and reviewed before they appear. Locations show what the angler chose to share — water name only by default.</small>
+      </section>
+
+      <section class="planning-grid" aria-label="Trip planning and partnerships">
+        <article class="outlook-card">
+          <p class="eyebrow">Plan the week</p>
+          <h2>Three mornings worth setting the alarm for.</h2>
+          <p class="weekly-summary" id="weekly-summary">The weekly read is generated from the live NOAA and NWS feed once it loads.</p>
+          <div class="outlook-days" id="outlook-days"></div>
+        </article>
+        <aside class="partner-card" id="partners">
+          <span class="sponsor-label">For local businesses</span>
+          <h2>Reach anglers planning their next morning on the water.</h2>
+          <p>Founding sponsor placements are being reserved for guides, marinas, tackle shops, restaurants, and Gulf Coast businesses.</p>
+          <a href="mailto:advertise@gulfcoastbite.com?subject=Founding%20Sponsor%20Inquiry">Ask about advertising <span>↗</span></a>
+          <small>Pensacola · Perdido Key · Orange Beach · Gulf Shores · Mobile Bay · Dauphin Island</small>
+        </aside>
+      </section>
+
+      <footer class="site-footer">
+        <div class="footer-brand">
+          <a href="#page-top">Gulf Coast Bite</a>
+          <p>Daily fishing conditions for the western Florida Panhandle and coastal Alabama.</p>
+          <small>Owned by R. McGarry CO. · Data from NOAA &amp; the National Weather Service</small>
+          <div class="footer-social" aria-label="Follow Gulf Coast Bite">
+            <span>Follow</span>
+            <a href="https://www.facebook.com/thegulfcoastbite" target="_blank" rel="me noopener noreferrer" aria-label="Gulf Coast Bite on Facebook"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M13.5 22v-9h3l.45-3.5H13.5V7.25c0-1.01.28-1.7 1.75-1.7H17V2.43c-.3-.04-1.33-.13-2.55-.13-2.52 0-4.25 1.54-4.25 4.37V9.5H7.35V13h2.85v9h3.3Z"/></svg><span>Facebook</span></a>
+            <a href="https://www.instagram.com/thegulfcoastbite/" target="_blank" rel="me noopener noreferrer" aria-label="Gulf Coast Bite on Instagram"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.7" r="1" class="social-dot"/></svg><span>Instagram</span></a>
+          </div>
+        </div>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <div class="footer-group footer-waters"><span>Local waters</span><div><a href="/pensacola-fishing-conditions">Pensacola Bay Area</a><a href="/perdido-key-fishing-conditions">Perdido Key</a><a href="/orange-beach-fishing-conditions">Orange Beach</a><a href="/gulf-shores-fishing-conditions">Gulf Shores</a><a href="/mobile-bay-fishing-conditions">Mobile Bay</a><a href="/dauphin-island-fishing-conditions">Dauphin Island</a></div></div>
+          <div class="footer-group"><span>Species guides</span><div><a href="/redfish-fishing-gulf-coast">Redfish</a><a href="/speckled-trout-fishing-gulf-coast">Speckled trout</a><a href="/flounder-fishing-gulf-coast">Flounder</a><a href="/sheepshead-fishing-gulf-coast">Sheepshead</a><a href="/pompano-fishing-gulf-coast">Pompano</a></div></div>
+          <div class="footer-group"><span>About</span><div><a href="/methodology">Methodology</a><a href="mailto:advertise@gulfcoastbite.com?subject=Founding%20Sponsor%20Inquiry">Advertise</a><a href="#page-top">Back to top ↑</a></div></div>
+          <div class="footer-group"><span>Legal</span><div><a href="/privacy">Privacy</a><button type="button" data-privacy-settings>Privacy choices</button><a href="/terms">Terms</a></div></div>
+        </nav>
+      </footer>
+    </main>
+
+    <div class="modal-backdrop" id="catch-backdrop" hidden>
+      <section class="catch-modal" role="dialog" aria-modal="true" aria-labelledby="catch-form-title">
+        <button class="modal-close" type="button" data-close-catch aria-label="Close catch form">×</button>
+        <p class="eyebrow">Field journal entry</p>
+        <h2 id="catch-form-title">Log the catch.</h2>
+        <p class="modal-intro">Save the details while they’re fresh. This log stays on your device.</p>
+        <form id="catch-form">
+          <label>Species<input id="catch-species" name="species" autocomplete="off" required></label>
+          <label>Water<select id="catch-spot" name="spot"></select></label>
+          <label>Length, inches<input name="length" inputmode="decimal" pattern="[0-9]*[.]?[0-9]*" placeholder="Optional"></label>
+          <label class="full-field">Field note<textarea name="note" rows="3" placeholder="Bait, depth, water clarity, what worked…"></textarea></label>
+          <div class="share-block full-field">
+            <label class="share-optin-label"><input type="checkbox" id="share-optin"> Share to the public catch board</label>
+            <small>Shared catches appear after a quick review.</small>
+            <div class="share-fields" id="share-fields">
+              <label>Display name<input id="share-name" maxlength="30" placeholder="e.g. Mac R." disabled></label>
+              <label>Location shown<select id="share-privacy" disabled><option value="water" selected>Water name only (recommended)</option><option value="exact">Exact spot</option><option value="area">General area only</option></select></label>
+              <label>Photo (optional)<input id="share-photo" type="file" accept="image/jpeg,image/png,image/webp" disabled></label>
+              <small id="share-status"></small>
+            </div>
+          </div>
+          <div class="form-actions"><button type="button" data-close-catch>Cancel</button><button type="submit">Save to journal →</button></div>
+        </form>
+      </section>
+    </div>
+    <div class="modal-backdrop" id="score-backdrop" hidden>
+      <section class="catch-modal score-modal" role="dialog" aria-modal="true" aria-labelledby="score-method-title">
+        <button class="modal-close" type="button" data-close-score aria-label="Close bite score explanation">×</button>
+        <p class="eyebrow">The morning number</p>
+        <h2 id="score-method-title">How the bite score works.</h2>
+        <p class="modal-intro">The score combines three conditions that consistently shape an inshore Gulf Coast bite. It is a planning guide—not a promise from the fish.</p>
+        <ol class="score-method">
+          <li><strong><span>40</span> Tide movement</strong><p>A larger predicted daily tide swing earns more points because moving water concentrates bait and usually improves feeding activity.</p></li>
+          <li><strong><span>35</span> Wind</strong><p>Seven mph or less earns full points. The score drops as wind builds, with a four-point floor for this component.</p></li>
+          <li><strong><span>25</span> Sky &amp; rain</strong><p>Broken cloud cover scores best. Clear skies are moderate; rain chances and thunderstorms reduce the score.</p></li>
+        </ol>
+        <p class="score-method-note"><strong>Final score:</strong> Tide + wind + sky/rain, limited to 15–97. The best fishing window is calculated separately using sunrise and the closest morning tide event.</p>
+        <div class="form-actions"><button type="button" data-close-score>Got it</button></div>
+      </section>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+    <aside class="privacy-banner" id="privacy-banner" aria-label="Analytics privacy choice" hidden>
+      <div><strong>Your privacy, plainly.</strong><p>We use optional Google Analytics cookies to understand site traffic. Catch journal entries stay on this device.</p></div>
+      <div><button type="button" data-analytics-decline>Essential only</button><button type="button" data-analytics-accept>Allow analytics</button></div>
+      <a href="/privacy">Read the privacy notice</a>
+    </aside>
+    <script src="/app.js?v=20260810-1" defer></script>
+  
+</body>
+</html>

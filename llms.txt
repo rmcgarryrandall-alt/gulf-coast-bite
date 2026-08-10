@@ -1,0 +1,31 @@
+# Gulf Coast Bite
+
+Gulf Coast Bite is a local fishing-conditions guide for Perdido Key, Pensacola Bay, East Bay, Santa Rosa Sound, Orange Beach, and Mobile Bay. It combines NOAA tide and water observations with National Weather Service forecasts to produce an explainable morning bite score, plus location-specific major and minor solunar periods.
+
+## Primary pages
+
+- [Live conditions dashboard](https://gulfcoastbite.com/)
+- [Perdido Key fishing conditions](https://gulfcoastbite.com/perdido-key-fishing-conditions)
+- [Pensacola Bay, East Bay, and Santa Rosa Sound fishing conditions](https://gulfcoastbite.com/pensacola-fishing-conditions)
+- [Orange Beach fishing conditions](https://gulfcoastbite.com/orange-beach-fishing-conditions)
+- [Mobile Bay fishing conditions](https://gulfcoastbite.com/mobile-bay-fishing-conditions)
+- [Gulf Shores fishing conditions](https://gulfcoastbite.com/gulf-shores-fishing-conditions)
+- [Dauphin Island fishing conditions](https://gulfcoastbite.com/dauphin-island-fishing-conditions)
+- [Bite score, solunar methodology, and data sources](https://gulfcoastbite.com/methodology)
+
+## Species guides
+
+- [Redfish fishing on the Gulf Coast](https://gulfcoastbite.com/redfish-fishing-gulf-coast)
+- [Speckled trout fishing](https://gulfcoastbite.com/speckled-trout-fishing-gulf-coast)
+- [Flounder fishing and the fall run](https://gulfcoastbite.com/flounder-fishing-gulf-coast)
+- [Sheepshead fishing](https://gulfcoastbite.com/sheepshead-fishing-gulf-coast)
+- [Pompano fishing in the surf](https://gulfcoastbite.com/pompano-fishing-gulf-coast)
+
+## Ownership and contact
+
+Gulf Coast Bite is owned by R. McGarry CO. Corrections and privacy questions: r.mcgarryrandall@gmail.com. Advertising inquiries: advertise@gulfcoastbite.com.
+
+## Important limitations
+
+Conditions and bite scores are planning aids, not safety forecasts or guarantees. Always verify marine warnings and fishing regulations with NOAA, the National Weather Service, Florida FWC, and Outdoor Alabama.
+

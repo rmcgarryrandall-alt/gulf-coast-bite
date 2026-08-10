@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Gulf Coast Bite redfish logo">
+  <circle cx="32" cy="32" r="31" fill="#f3ebdd"/>
+  <circle cx="32" cy="32" r="27.5" fill="none" stroke="#102a3a" stroke-width="2" stroke-dasharray="2.5 1.3"/>
+  <path d="M19 32 10 23l3 10-3 8 10-7c10 7 25 8 36-1-10-8-26-8-36-2Z" fill="#89a9a6" fill-opacity=".34" stroke="#102a3a" stroke-width="1.7" stroke-linejoin="round"/>
+  <path d="m27 27 6 5m-5 8 6-7M15 47c7-4 13 4 20 0s11 3 16 0" fill="none" stroke="#df5b43" stroke-width="1.7" stroke-linecap="round"/>
+  <circle cx="47" cy="29" r="2.4" fill="#df5b43"/>
+  <circle cx="53" cy="30" r="1.1" fill="#102a3a"/>
+</svg>
