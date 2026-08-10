@@ -5,10 +5,10 @@
    - Live data APIs (NOAA / NWS / functions): network-first with a short cache
      fallback, so a dead zone still shows the most recent conditions.
    Version bump the CACHE name to force a refresh of the shell. */
-const CACHE = "gcb-shell-v3";
+const CACHE = "gcb-shell-v4";
 const SHELL = [
   "/",
-  "/styles.css?v=20260810-4",
+  "/styles.css?v=20260810-5",
   "/app.js?v=20260810-3",
   "/favicon.svg",
   "/icon-192.png",

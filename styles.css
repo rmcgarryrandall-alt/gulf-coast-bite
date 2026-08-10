@@ -642,9 +642,6 @@ header nav a { white-space: nowrap; }
 }
 
 /* ── Wave 1 · 2026-08-10 ───────────────────────────────────────────────── */
-/* Install chip */
-.install-chip { margin-left: auto; border: 1px solid var(--coral); color: var(--coral-dark); background: #fff6; border-radius: 999px; padding: 6px 14px; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; white-space: nowrap; }
-.install-chip:hover { background: var(--coral); color: #fff; }
 
 /* 7-day bite trend */
 .trend-section { border-bottom: 1px solid #102a3a66; padding: 40px 0 42px; }
@@ -780,7 +777,6 @@ header nav a { white-space: nowrap; }
   /* Alerts card + install chip */
   .alerts-card { padding: 20px 18px; }
   .alerts-row { grid-template-columns: 1fr; }
-  .install-chip { margin: 10px 0 0; }
 
   /* Weekly narrative inside outlook card */
   .weekly-summary { margin: -8px 0 22px; font-size: 14px; }
