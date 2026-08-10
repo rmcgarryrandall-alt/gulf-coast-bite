@@ -150,15 +150,6 @@
         <div class="solunar-foot"><span id="solunar-location">Local astronomical calculation</span><a href="/methodology#solunar-periods">How these periods are calculated →</a></div>
       </section>
 
-      <section class="trend-section" id="trend" aria-labelledby="trend-title">
-        <div class="trend-heading">
-          <div><p class="eyebrow">The week ahead</p><h2 id="trend-title">7-day bite trend.</h2></div>
-          <div class="trend-legend"><span id="trend-watertemp">Water —°F</span></div>
-        </div>
-        <div class="trend-chart" id="trend-chart" aria-label="Seven-day bite score trend"></div>
-        <p class="trend-caption" id="trend-caption">Loading the seven-day outlook…</p>
-      </section>
-
       <section class="lower-grid">
         <article class="target-card">
           <div class="section-heading"><span>Target today</span></div>
@@ -206,19 +197,13 @@
         <div class="regulations-foot"><span><b>TL</b> total length · <b>FL</b> fork length · daily limits are per person unless noted</span><a id="regulations-link" href="https://myfwc.com/fishing/saltwater/recreational/" target="_blank" rel="noopener">Verify with Florida FWC ↗</a></div>
       </section>
 
-      <section class="season-watch" id="season-watch" aria-labelledby="season-watch-title">
-        <div class="season-heading">
-          <div><p class="eyebrow">Season watch</p><h2 id="season-watch-title">What the calendar says.</h2></div>
-          <span class="season-month" id="season-watch-month">This month on the water</span>
-        </div>
+      <section class="season-watch" id="season-watch" aria-label="Season watch">
+        <div class="section-heading"><span>Season watch</span><span class="season-month" id="season-watch-month">This month on the water</span></div>
         <div id="season-watch-content"></div>
       </section>
 
       <section class="bait-directory" id="bait-shops" aria-labelledby="bait-heading">
-        <div class="directory-heading">
-          <div><p class="eyebrow">Before you launch</p><h2 id="bait-heading">Live bait nearby.</h2></div>
-          <p>Call ahead—shrimp, croaker, and minnows can sell out before breakfast.</p>
-        </div>
+        <div class="section-heading"><span id="bait-heading">Live bait nearby</span><span class="bait-note">Call ahead — live bait sells out before breakfast</span></div>
         <div class="shop-list" id="shop-list"></div>
       </section>
 
@@ -247,6 +232,11 @@
         <article class="outlook-card">
           <p class="eyebrow">Plan the week</p>
           <h2>Three mornings worth setting the alarm for.</h2>
+          <div class="outlook-trend">
+            <div class="outlook-trend-head"><span>7-day bite trend</span><span id="trend-watertemp">Water —°F</span></div>
+            <div class="trend-chart" id="trend-chart" aria-label="Seven-day bite score trend"></div>
+            <p class="trend-caption" id="trend-caption">Loading the seven-day outlook…</p>
+          </div>
           <p class="weekly-summary" id="weekly-summary">The weekly read is generated from the live NOAA and NWS feed once it loads.</p>
           <div class="outlook-days" id="outlook-days"></div>
         </article>
