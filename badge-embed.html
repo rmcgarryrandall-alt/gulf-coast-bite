@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Embed the Live Bite Score Badge | Gulf Coast Bite</title>
+    <meta name="description" content="Add a free live fishing bite-score badge for Pensacola, Perdido Key, Orange Beach, Gulf Shores, Mobile Bay, or Dauphin Island to your website. One line of HTML.">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#f3ebdd">
+    <link rel="canonical" href="https://gulfcoastbite.com/badge-embed">
+    <link rel="icon" href="/favicon.ico?v=20260713-3" sizes="any">
+    <link rel="icon" href="/favicon.svg?v=20260713-3" type="image/svg+xml">
+    <link rel="stylesheet" href="/styles.css?v=20260810-2">
+    <style>
+      .embed-demo { max-width: 300px; margin: 14px 0; }
+      .embed-demo iframe { width: 300px; height: 74px; border: 0; }
+      .embed-code { background: #102a3a; color: #f3ebdd; padding: 14px 16px; border-radius: 8px; font: 12px/1.6 ui-monospace, Menlo, Consolas, monospace; overflow-x: auto; white-space: pre; }
+      .embed-pick { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0 4px; }
+      .embed-pick button { border: 1px solid #102a3a57; background: #ffffff40; border-radius: 999px; padding: 6px 14px; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; }
+      .embed-pick button.on { background: var(--navy); color: #f3ebdd; }
+    </style>
+  </head>
+  <body>
+    <main class="guide-page">
+      <nav class="guide-nav" aria-label="Guide navigation"><a href="/">Gulf Coast Bite</a><div><a href="/weekly-outlook">Weekly outlook</a><a href="/methodology">Methodology</a></div></nav>
+      <header class="guide-hero"><p class="eyebrow">For bait shops, guides, marinas &amp; local sites</p><h1>Put the live bite score on your website.</h1><p>A small badge that shows today's live bite score for your water, updated from NOAA and NWS data, linking back to the full report. Free, no signup, one line of HTML. If you run a bait shop, charter, or local site, this keeps your page current without touching it.</p></header>
+      <section class="guide-section">
+        <h2>Pick your water</h2>
+        <div class="embed-pick" id="pick">
+          <button data-loc="perdido" class="on">Perdido Key</button>
+          <button data-loc="pensacola">Pensacola</button>
+          <button data-loc="orange-beach">Orange Beach</button>
+          <button data-loc="gulf-shores">Gulf Shores</button>
+          <button data-loc="mobile">Mobile Bay</button>
+          <button data-loc="dauphin">Dauphin Island</button>
+        </div>
+        <div class="embed-demo"><iframe id="demo" src="/badge.html?loc=perdido" title="Live bite score badge preview" loading="lazy"></iframe></div>
+        <h2>Copy this line</h2>
+        <div class="embed-code" id="code">&lt;iframe src="https://gulfcoastbite.com/badge.html?loc=perdido" width="300" height="74" style="border:0" title="Live fishing bite score"&gt;&lt;/iframe&gt;</div>
+        <p class="guide-note">The badge is free to embed for any Gulf Coast business or community site. We ask only that you leave the link intact. Questions or a custom size: <a href="mailto:advertise@gulfcoastbite.com">advertise@gulfcoastbite.com</a>.</p>
+      </section>
+      <footer class="guide-footer"><span>Gulf Coast Bite · Owned by R. McGarry CO.</span><div><a href="/">Live dashboard</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a></div></footer>
+    </main>
+    <script>
+      (function () {
+        var pick = document.getElementById("pick");
+        pick.addEventListener("click", function (e) {
+          var b = e.target.closest("button[data-loc]");
+          if (!b) return;
+          pick.querySelectorAll("button").forEach(function (x) { x.classList.remove("on"); });
+          b.classList.add("on");
+          var loc = b.getAttribute("data-loc");
+          document.getElementById("demo").src = "/badge.html?loc=" + loc;
+          document.getElementById("code").textContent = '<iframe src="https://gulfcoastbite.com/badge.html?loc=' + loc + '" width="300" height="74" style="border:0" title="Live fishing bite score"></iframe>';
+        });
+      })();
+    </script>
+  </body>
+</html>

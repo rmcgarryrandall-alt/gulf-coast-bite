@@ -74,3 +74,9 @@ Current method: Netlify file-digest deploy (preserves the `catches` function). T
 ---
 
 Owned by R. McGarry CO. Conditions and bite scores are planning aids, not safety forecasts. Always verify marine warnings and fishing regulations with NOAA, the NWS, Florida FWC, and Outdoor Alabama.
+
+## August 2026 expansion
+
+Added in the "do it all" build: PWA (manifest + service worker + icons, installable with offline shell), 7-day bite trend chart, private journal pattern analysis (conditions captured with each logged catch), per-location voice in the report engine, 30 species-by-location pages, `/weekly-outlook` (live weekly read with a copy-for-forum button), `/badge.html` + `/badge-embed` (free embeddable live bite-score badge for local businesses), `/fishing-charters-guides` (directory with founding-listing CTA), red tide Water Watch (live FWC HAB sample query), community leaderboard on the catch board, and a bite-alert signup (interim transport: FormSubmit to the owner's inbox; `netlify/functions/alerts-daily.mjs.scaffold` documents full automation with Netlify Blobs + Resend + scheduled functions).
+
+Affiliate note: species-page gear links point at Amazon searches with `rel="sponsored"`; append an Associates tag when one exists.

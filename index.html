@@ -24,7 +24,12 @@
     <meta name="twitter:image" content="https://gulfcoastbite.com/og-gulf-coast-bite.png">
     <link rel="icon" href="/favicon.ico?v=20260713-3" sizes="any">
     <link rel="icon" href="/favicon.svg?v=20260713-3" type="image/svg+xml">
-    <link rel="stylesheet" href="/styles.css?v=20260810-1">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Gulf Coast Bite">
+    <link rel="stylesheet" href="/styles.css?v=20260810-3">
     <script type="application/ld+json">
       {"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://gulfcoastbite.com/#organization","name":"R. McGarry CO.","url":"https://gulfcoastbite.com/","brand":{"@type":"Brand","name":"Gulf Coast Bite","logo":"https://gulfcoastbite.com/favicon.svg"},"email":"r.mcgarryrandall@gmail.com","sameAs":["https://www.facebook.com/thegulfcoastbite","https://www.instagram.com/thegulfcoastbite/"]},{"@type":"WebSite","@id":"https://gulfcoastbite.com/#website","url":"https://gulfcoastbite.com/","name":"Gulf Coast Bite","description":"Local fishing conditions, bite forecasts, tides, solunar periods, bait shops, and regulations for the western Florida Panhandle and coastal Alabama.","publisher":{"@id":"https://gulfcoastbite.com/#organization"},"inLanguage":"en-US"},{"@type":"WebPage","@id":"https://gulfcoastbite.com/#webpage","url":"https://gulfcoastbite.com/","name":"Gulf Coast Bite | Local Fishing Conditions","isPartOf":{"@id":"https://gulfcoastbite.com/#website"},"about":[{"@type":"Place","name":"Perdido Key, Florida"},{"@type":"Place","name":"Pensacola Bay, Florida"},{"@type":"Place","name":"East Bay, Florida"},{"@type":"Place","name":"Santa Rosa Sound, Florida"},{"@type":"Place","name":"Orange Beach, Alabama"},{"@type":"Place","name":"Mobile Bay, Alabama"}],"dateModified":"2026-08-10","inLanguage":"en-US"}]}
     </script>
@@ -71,6 +76,7 @@
       <div class="region-bar" aria-label="Choose local water">
         <span>Pensacola to Dauphin Island</span>
         <div id="location-controls"></div>
+        <button type="button" id="install-app" class="install-chip" hidden>Install app <span aria-hidden="true">↓</span></button>
       </div>
 
       <section class="day-strip" aria-label="Forecast day" aria-live="polite">
@@ -145,6 +151,15 @@
         <div class="solunar-foot"><span id="solunar-location">Local astronomical calculation</span><a href="/methodology#solunar-periods">How these periods are calculated →</a></div>
       </section>
 
+      <section class="trend-section" id="trend" aria-labelledby="trend-title">
+        <div class="trend-heading">
+          <div><p class="eyebrow">The week ahead</p><h2 id="trend-title">7-day bite trend.</h2></div>
+          <div class="trend-legend"><span id="trend-watertemp">Water —°F</span></div>
+        </div>
+        <div class="trend-chart" id="trend-chart" aria-label="Seven-day bite score trend"></div>
+        <p class="trend-caption" id="trend-caption">Loading the seven-day outlook…</p>
+      </section>
+
       <section class="lower-grid">
         <article class="target-card">
           <div class="section-heading"><span>Target today</span></div>
@@ -186,6 +201,7 @@
           <div><p class="eyebrow">Keep it legal</p><h2 id="limits-heading">Size &amp; catch limits.</h2></div>
           <span class="regulations-state" id="regulations-state">Florida Panhandle</span>
         </div>
+        <div class="water-watch" id="water-watch" aria-live="polite"></div>
         <p class="regulations-warning"><strong>Verify before you keep a fish.</strong> Regulations, seasons, emergency closures, state-water boundaries, and federal rules change often. This quick reference is not a substitute for the official state regulations.</p>
         <div class="regulations-list" id="regulations-list"></div>
         <div class="regulations-foot"><span><b>TL</b> total length · <b>FL</b> fork length · daily limits are per person unless noted</span><a id="regulations-link" href="https://myfwc.com/fishing/saltwater/recreational/" target="_blank" rel="noopener">Verify with Florida FWC ↗</a></div>
@@ -212,6 +228,7 @@
           <div><p class="eyebrow">Your field log</p><h2 id="catch-ledger-heading">Catch ledger</h2></div>
           <button type="button" data-open-catch>+ Add a catch</button>
         </div>
+        <div class="your-patterns" id="your-patterns" hidden></div>
         <div id="catch-content"></div>
       </section>
 
@@ -221,6 +238,7 @@
           <button type="button" data-open-catch>Share a catch</button>
         </div>
         <div class="catch-week" id="catch-week" hidden></div>
+        <div class="board-leaders" id="board-leaders" hidden></div>
         <div id="board-list" class="catch-list"></div>
         <p id="board-empty" class="board-empty" hidden>No shared catches yet. Log a catch and check “Share to the public catch board” to put the first fish up.</p>
         <small class="board-foot">Catches are shared voluntarily and reviewed before they appear. Locations show what the angler chose to share — water name only by default.</small>
@@ -233,6 +251,31 @@
           <p class="weekly-summary" id="weekly-summary">The weekly read is generated from the live NOAA and NWS feed once it loads.</p>
           <div class="outlook-days" id="outlook-days"></div>
         </article>
+        <aside class="alerts-card" id="alerts">
+          <span class="sponsor-label">Free · launching now</span>
+          <h2>Get the bite score before your alarm goes off.</h2>
+          <p>One short email when your water wakes up: the day's score, window, and target. Daily or only on 80+ mornings — your call.</p>
+          <form id="alerts-form">
+            <input type="email" id="alert-email" name="email" placeholder="you@example.com" required autocomplete="email" aria-label="Email address">
+            <div class="alerts-row">
+              <select id="alert-loc" name="location" aria-label="Your water">
+                <option value="Perdido Key">Perdido Key</option>
+                <option value="Pensacola">Pensacola</option>
+                <option value="Orange Beach">Orange Beach</option>
+                <option value="Gulf Shores">Gulf Shores</option>
+                <option value="Mobile Bay">Mobile Bay</option>
+                <option value="Dauphin Island">Dauphin Island</option>
+              </select>
+              <select id="alert-mode" name="mode" aria-label="Alert frequency">
+                <option value="daily">Every morning</option>
+                <option value="hot">Only 80+ days</option>
+              </select>
+            </div>
+            <button type="submit">Sign me up →</button>
+            <small id="alerts-status"></small>
+          </form>
+          <small>No spam, no sharing, unsubscribe by replying "stop".</small>
+        </aside>
         <aside class="partner-card" id="partners">
           <span class="sponsor-label">For local businesses</span>
           <h2>Reach anglers planning their next morning on the water.</h2>
@@ -256,7 +299,7 @@
         <nav class="footer-nav" aria-label="Footer navigation">
           <div class="footer-group footer-waters"><span>Local waters</span><div><a href="/pensacola-fishing-conditions">Pensacola Bay Area</a><a href="/perdido-key-fishing-conditions">Perdido Key</a><a href="/orange-beach-fishing-conditions">Orange Beach</a><a href="/gulf-shores-fishing-conditions">Gulf Shores</a><a href="/mobile-bay-fishing-conditions">Mobile Bay</a><a href="/dauphin-island-fishing-conditions">Dauphin Island</a></div></div>
           <div class="footer-group"><span>Species guides</span><div><a href="/redfish-fishing-gulf-coast">Redfish</a><a href="/speckled-trout-fishing-gulf-coast">Speckled trout</a><a href="/flounder-fishing-gulf-coast">Flounder</a><a href="/sheepshead-fishing-gulf-coast">Sheepshead</a><a href="/pompano-fishing-gulf-coast">Pompano</a></div></div>
-          <div class="footer-group"><span>About</span><div><a href="/methodology">Methodology</a><a href="mailto:advertise@gulfcoastbite.com?subject=Founding%20Sponsor%20Inquiry">Advertise</a><a href="#page-top">Back to top ↑</a></div></div>
+          <div class="footer-group"><span>About</span><div><a href="/methodology">Methodology</a><a href="/weekly-outlook">Weekly outlook</a><a href="/fishing-charters-guides">Charters &amp; guides</a><a href="/badge-embed">Bite score badge</a><a href="mailto:advertise@gulfcoastbite.com?subject=Founding%20Sponsor%20Inquiry">Advertise</a><a href="#page-top">Back to top ↑</a></div></div>
           <div class="footer-group"><span>Legal</span><div><a href="/privacy">Privacy</a><button type="button" data-privacy-settings>Privacy choices</button><a href="/terms">Terms</a></div></div>
         </nav>
       </footer>
@@ -308,7 +351,29 @@
       <div><button type="button" data-analytics-decline>Essential only</button><button type="button" data-analytics-accept>Allow analytics</button></div>
       <a href="/privacy">Read the privacy notice</a>
     </aside>
-    <script src="/app.js?v=20260810-1" defer></script>
-  
+    <script src="/app.js?v=20260810-3" defer></script>
+    <script>
+      // PWA: register service worker + surface an install button when eligible.
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("/sw.js").catch(function () {});
+        });
+      }
+      (function () {
+        var deferred = null;
+        var btn = document.getElementById("install-app");
+        window.addEventListener("beforeinstallprompt", function (e) {
+          e.preventDefault();
+          deferred = e;
+          if (btn) btn.hidden = false;
+        });
+        if (btn) btn.addEventListener("click", function () {
+          if (!deferred) return;
+          deferred.prompt();
+          deferred.userChoice.finally(function () { deferred = null; btn.hidden = true; });
+        });
+        window.addEventListener("appinstalled", function () { if (btn) btn.hidden = true; });
+      })();
+    </script>
 </body>
 </html>

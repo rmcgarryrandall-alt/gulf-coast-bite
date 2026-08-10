@@ -21,6 +21,14 @@ Gulf Coast Bite is a local fishing-conditions guide for Perdido Key, Pensacola B
 - [Sheepshead fishing](https://gulfcoastbite.com/sheepshead-fishing-gulf-coast)
 - [Pompano fishing in the surf](https://gulfcoastbite.com/pompano-fishing-gulf-coast)
 
+## Weekly outlook and tools
+
+- [This week on the water (live weekly outlook)](https://gulfcoastbite.com/weekly-outlook)
+- [Fishing charters and guides directory](https://gulfcoastbite.com/fishing-charters-guides)
+- [Embeddable live bite-score badge](https://gulfcoastbite.com/badge-embed)
+
+Species-by-location guides exist for redfish, speckled trout, flounder, sheepshead, and pompano across Perdido Key, Pensacola, Orange Beach, Gulf Shores, Mobile Bay, and Dauphin Island at URLs of the form /{species}-fishing-{location}.
+
 ## Ownership and contact
 
 Gulf Coast Bite is owned by R. McGarry CO. Corrections and privacy questions: r.mcgarryrandall@gmail.com. Advertising inquiries: advertise@gulfcoastbite.com.

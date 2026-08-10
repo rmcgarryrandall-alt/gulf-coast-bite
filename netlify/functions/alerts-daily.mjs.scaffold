@@ -1,0 +1,87 @@
+// Daily bite alert sender — SCAFFOLD, not yet deployed.
+// Rename to alerts-daily.mjs and deploy WITH the functions bundle to activate.
+//
+// Activation checklist:
+//   1. Create a Resend account (resend.com), verify gulfcoastbite.com, get an API key.
+//   2. Netlify site settings → Environment variables: add RESEND_API_KEY.
+//   3. Move subscriber records into Netlify Blobs store "alert-subs" (one JSON per email:
+//      { email, location, mode: "daily"|"hot", confirmed: true }). Interim signups arrive
+//      by email via FormSubmit — add them manually or build the subscribe function.
+//   4. Deploy via `netlify deploy --prod` from the repo so BOTH this function and the
+//      existing catches function ship together (see README: never git-auto-deploy
+//      without the catches source).
+//
+// Schedule: 5:15 AM Central = 10:15 UTC (11:15 UTC in winter — pick one, cron is UTC).
+
+import { getStore } from "@netlify/blobs";
+
+export const config = { schedule: "15 10 * * *" };
+
+const LOCS = {
+  "Perdido Key": { lat: 30.294, lon: -87.44, tide: "8730667" },
+  "Pensacola": { lat: 30.4, lon: -87.21, tide: "8729909" },
+  "Orange Beach": { lat: 30.27, lon: -87.57, tide: "8730667" },
+  "Gulf Shores": { lat: 30.246, lon: -87.7, tide: "8731439" },
+  "Mobile Bay": { lat: 30.44, lon: -88.01, tide: "8735180" },
+  "Dauphin Island": { lat: 30.251, lon: -88.109, tide: "8735180" }
+};
+
+function scoreParts(range, wind, precip, forecast) {
+  const tide = Math.round(Math.max(6, Math.min(40, 24 * range)));
+  const w = wind <= 7 ? 35 : Math.round(Math.max(4, 35 - (wind - 7) * 2.4));
+  const text = (forecast || "").toLowerCase();
+  let sky = /thunder|storm/.test(text) ? 4 : /heavy rain/.test(text) ? 8 : /rain|showers|drizzle/.test(text) ? 12 : /partly|mostly cloudy|overcast|broken|cloud/.test(text) ? 25 : /sunny|clear|fair/.test(text) ? 18 : 16;
+  sky = Math.max(0, Math.round(sky - 0.12 * (precip || 0)));
+  return Math.max(15, Math.min(97, tide + w + sky));
+}
+
+async function j(url) { const r = await fetch(url); if (!r.ok) throw new Error(String(r.status)); return r.json(); }
+
+async function scoreLocation(name) {
+  const loc = LOCS[name];
+  const now = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  const ds = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}`;
+  const point = await j(`https://api.weather.gov/points/${loc.lat},${loc.lon}`);
+  const daily = await j(point.properties.forecast);
+  const iso = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+  const period = daily.properties.periods.find((p) => p.isDaytime && p.startTime.slice(0, 10) === iso) || daily.properties.periods[0];
+  const curve = await j(`https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?product=predictions&application=gulfcoastbite-alerts&station=${loc.tide}&begin_date=${ds}&range=24&datum=MLLW&units=english&time_zone=lst_ldt&interval=30&format=json`);
+  const vals = (curve.predictions || []).map((p) => Number(p.v));
+  const range = vals.length ? Math.max(...vals) - Math.min(...vals) : 1.2;
+  const wind = Number((period.windSpeed || "8").match(/\d+/)?.[0] || 8);
+  return { score: scoreParts(range, wind, period.probabilityOfPrecipitation?.value || 0, period.shortForecast || ""), weather: (period.shortForecast || "").split(/ then /i)[0], wind };
+}
+
+export default async () => {
+  const subsStore = getStore("alert-subs");
+  const { blobs } = await subsStore.list();
+  const subs = [];
+  for (const b of blobs) {
+    const s = await subsStore.get(b.key, { type: "json" }).catch(() => null);
+    if (s?.email && s?.confirmed !== false) subs.push(s);
+  }
+  if (!subs.length) return new Response("no subscribers");
+
+  const byLoc = {};
+  for (const s of subs) (byLoc[s.location] ||= []).push(s);
+
+  let sent = 0;
+  for (const [locName, list] of Object.entries(byLoc)) {
+    if (!LOCS[locName]) continue;
+    let day;
+    try { day = await scoreLocation(locName); } catch { continue; }
+    for (const sub of list) {
+      if (sub.mode === "hot" && day.score < 80) continue;
+      const subject = `${locName}: bite score ${day.score} — ${day.weather}`;
+      const body = `Today's ${locName} bite score is ${day.score}/100. ${day.weather}, wind around ${day.wind} mph.\n\nFull report, tides, and solunar windows: https://gulfcoastbite.com\n\nReply "stop" to unsubscribe.`;
+      const r = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ from: "Gulf Coast Bite <bite@gulfcoastbite.com>", to: sub.email, subject, text: body })
+      });
+      if (r.ok) sent += 1;
+    }
+  }
+  return new Response(`sent ${sent}`);
+};

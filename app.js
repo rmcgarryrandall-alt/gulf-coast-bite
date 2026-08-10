@@ -402,6 +402,11 @@
       if (water != null && water >= 87 && day.score >= 55) pool = pool.concat(HEADLINES.hotWater);
     }
 
+    const local = locationFlavor();
+    if (local && day.score >= 45 && windSpeed < 18 && !/thunder|storm/.test(sky)) {
+      if (stableIndex(`${seed}|lochl`, 5) < 2) pool = local.headlines.slice();
+      else pool = pool.concat(local.headlines);
+    }
     const history = state.dayIndex === 0 ? readCopyHistory().headlines.slice(0, 4) : [];
     const headline = freshPick(pool, seed, history);
     if (state.dayIndex === 0 && state.status === "live") rememberCopy("headlines", headline);
@@ -464,20 +469,29 @@
         `Good water movement; center the trip on ${day.window}.`,
         `The tide has enough swing to organize bait, so protect the ${day.window} window.`,
         `Plenty of current today. Let the swing around ${tideEvent} set the schedule.`,
-        `Bait moves when the water moves; stay on it through ${day.window}.`
+        `Bait moves when the water moves; stay on it through ${day.window}.`,
+        `Strong swing on the sheet; the current around ${tideEvent} will do half the work.`,
+        `Real current today. The window at ${day.window} is worth guarding jealously.`,
+        `Water will be moving hard around ${tideEvent}; build the morning backward from that.`
       ], `${seed}|tide`)
       : tidePoints <= 18
         ? deterministicPick([
           `Limited tide range; save the best casts for the turn around ${tideEvent}.`,
           `Water movement is modest. Fish the change near ${tideEvent}, then keep moving.`,
           `Neap-ish tide. The short burst of current near ${tideEvent} is the whole ballgame.`,
-          `Small swing today, so drains and pinch points concentrate what current there is.`
+          `Small swing today, so drains and pinch points concentrate what current there is.`,
+          `Not much tide to work with; hunt the spots that squeeze current out of nothing.`,
+          `Soft tide day. Structure and shade matter more than the clock.`,
+          `The swing is thin, which puts a premium on the minutes around ${tideEvent}.`
         ], `${seed}|tide`)
         : deterministicPick([
           `Moderate tide movement puts the best opportunity around ${day.window}.`,
           `The tide is workable rather than strong; concentrate effort on ${day.window}.`,
           `Enough current to matter around ${tideEvent}. Fish it rather than the slack.`,
-          `A middling swing. Plan the first stop to line up with ${day.window}.`
+          `A middling swing. Plan the first stop to line up with ${day.window}.`,
+          `An average tide, honestly fished, beats a big one slept through; ${day.window} is the shift.`,
+          `Decent movement around ${tideEvent}; not a flood, but enough to line the fish up.`,
+          `Workable current through ${day.window}, then a long slack worth skipping.`
         ], `${seed}|tide`);
 
     const wind = /thunder|storm/.test(sky)
@@ -487,20 +501,29 @@
           "Light wind should leave clean, easy-to-read water.",
           "Calm wind favors long casts and subtle presentations.",
           "Slick water, so watch for nervous bait instead of birds.",
-          "Barely a ripple; quiet approaches will out-fish noisy ones."
+          "Barely a ripple; quiet approaches will out-fish noisy ones.",
+          "Near-calm conditions, so every wake and every splash carries; fish like a heron.",
+          "Glassy early. Downsize the leader and let the bait do the talking.",
+          "Light air means honest sight-fishing; sunglasses matter more than lure color."
         ], `${seed}|wind`)
         : windSpeed <= 14
           ? deterministicPick([
             `The ${day.wind} mph breeze is manageable; favor the lee edge.`,
             `Enough wind to stack bait on the windward shorelines, so check them first.`,
             `Use the ${day.wind} mph wind for controlled drifts along protected edges.`,
-            `A honest breeze today. The lee side stays readable; the open water goes dirty first.`
+            `A honest breeze today. The lee side stays readable; the open water goes dirty first.`,
+            `Workable wind; drift the edges with it instead of fighting it on the trolling motor.`,
+            `The breeze will put a walking chop on open water, which usually helps more than it hurts.`,
+            `Enough wind to move the boat; set up drifts that end where the fish should be.`
           ], `${seed}|wind`)
           : deterministicPick([
             `With ${day.wind} mph, stay protected and shorten each cast.`,
             `The wind makes lee shorelines the whole game today.`,
             `That breeze will dirty the open water; find the clean seam and stay on it.`,
-            `Big wind, small water: canals, lee banks, and tight structure.`
+            `Big wind, small water: canals, lee banks, and tight structure.`,
+            `Wind like this compresses the fishable water to a few protected pockets; commit to them.`,
+            `Blowy. Anchor more, run less, and let the wind pin the bait for you.`,
+            `A day for the sheltered third of the map; the open water is a spray ride, not a fishery.`
           ], `${seed}|wind`);
 
     const flavors = [];
@@ -514,8 +537,18 @@
     if ((monthIdx >= 5 && monthIdx <= 7) && species.key === "trout" && species.summerNote) flavors.push(species.summerNote);
     if ((monthIdx <= 1 || monthIdx === 11) && species.winterNote) flavors.push(species.winterNote);
     if ((monthIdx >= 1 && monthIdx <= 3) && species.key === "sheepshead" && species.springNote) flavors.push(species.springNote);
-    if (!flavors.length && /cloud|overcast/.test(sky)) flavors.push("Cloud cover should stretch the bite past the usual morning cutoff.");
-    if (!flavors.length && /sun|clear/.test(sky)) flavors.push("Bright sky by mid-morning means shade lines and depth become the play.");
+    if (!flavors.length && /cloud|overcast/.test(sky)) flavors.push(deterministicPick([
+      "Cloud cover should stretch the bite past the usual morning cutoff.",
+      "Gray sky buys you an extra hour of shallow water; use it.",
+      "The overcast keeps fish shallower and braver than the calendar says they should be.",
+      "Soft light all morning, so the shallow bite may never fully shut off."
+    ], `${seed}|skyline`));
+    if (!flavors.length && /sun|clear/.test(sky)) flavors.push(deterministicPick([
+      "Bright sky by mid-morning means shade lines and depth become the play.",
+      "High sun will push fish to shade and depth; the early window is the honest one.",
+      "Clear sky day: fish fast early, then slow and deep once the glare sets in.",
+      "Full sun by nine, so treat the first light hours as the whole trip."
+    ], `${seed}|skyline`));
     const flavor = flavors.length ? deterministicPick(flavors, `${seed}|flavor`) : "";
 
     const backup = targets.backup && targets.backup.key !== species.key
@@ -537,7 +570,19 @@
       "The second-best spot with moving water beats the best spot without it."
     ], `${seed}|close`);
 
-    const note = [opening, tide, wind, flavor, backup, closer].filter(Boolean).join(" ");
+    const local = locationFlavor();
+    const localLine = local && stableIndex(`${seed}|uselocal`, 10) < 8
+      ? deterministicPick(local.lines, `${seed}|local`)
+      : "";
+    const closerPool = local ? [closer, ...local.closers] : [closer];
+    const finalCloser = deterministicPick(closerPool, `${seed}|finalclose`);
+    const arrangement = stableIndex(`${state.locationKey}|${day.dateISO}|shape`, 3);
+    const order = arrangement === 0
+      ? [opening, tide, wind, localLine, flavor, backup, finalCloser]
+      : arrangement === 1
+        ? [opening, localLine, wind, tide, flavor, backup, finalCloser]
+        : [opening, wind, tide, flavor, localLine, backup, finalCloser];
+    const note = order.filter(Boolean).join(" ");
     if (state.dayIndex === 0 && state.status === "live") rememberCopy("notes", String(stableIndex(note, 999983)));
     return note;
   }
@@ -801,6 +846,7 @@
       if (empty) empty.hidden = true;
       list.innerHTML = entries.map(boardCard).join("");
       renderCatchOfTheWeek(entries);
+      renderLeaderboard(entries);
     } catch { /* board is progressive enhancement */ }
   }
 
@@ -937,8 +983,355 @@
     el("baro-label").textContent = `Pressure · ${baro.trend.charAt(0).toUpperCase()}${baro.trend.slice(1)}`;
   }
 
+  // ── GCB Wave 1 · trends, condition capture, journal patterns ─────────────
+
+  // Snapshot the conditions shown right now, stored with each logged catch so
+  // personal patterns can emerge over time.
+  function captureConditions() {
+    const data = state.data[state.locationKey];
+    const day = (currentDays() || [])[state.dayIndex] || {};
+    const moon = day.dateISO ? moonPhaseFor(new Date(`${day.dateISO}T12:00:00`)) : null;
+    const score = parseInt(el("bite-score")?.textContent, 10);
+    return {
+      score: Number.isFinite(score) ? score : (day.score ?? null),
+      water: data?.water ?? day.water ?? null,
+      wind: day.wind || null,
+      windDir: (day.wind || "").match(/^[A-Z]{1,3}/)?.[0] || null,
+      windMph: Number((day.wind || "").match(/\d+/)?.[0]) || null,
+      tideHigh: day.highTime && day.highTime !== "—" ? day.highTime : null,
+      tideLow: day.lowTime && day.lowTime !== "—" ? day.lowTime : null,
+      moon: moon?.name || null,
+      baroTrend: data?.baroTrend || null,
+      weather: day.weatherFull || day.weather || null,
+      month: day.dateISO ? Number(day.dateISO.slice(5, 7)) : (new Date().getMonth() + 1),
+      loc: state.locationKey
+    };
+  }
+
+  // ── 7-day bite trend chart ───────────────────────────────────────────────
+  function renderTrend(days) {
+    const chart = el("trend-chart");
+    const caption = el("trend-caption");
+    if (!chart) return;
+    if (!days || !days.length) {
+      caption.textContent = "The seven-day outlook loads with the live NOAA / NWS feed.";
+      return;
+    }
+    const week = days.slice(0, 7);
+    const max = Math.max(...week.map((d) => d.score), 60);
+    const min = Math.min(...week.map((d) => d.score), 40);
+    const span = Math.max(1, max - min);
+    const bars = week.map((day, index) => {
+      const pct = 18 + Math.round(((day.score - min) / span) * 72);
+      const band = day.score >= 80 ? "hot" : day.score >= 65 ? "good" : day.score >= 45 ? "fair" : "slow";
+      const dow = day.label === "Today" ? "Today" : (day.date.split("·")[0] || day.label).trim();
+      const selected = index === state.dayIndex ? " is-selected" : "";
+      return `<button type="button" class="trend-bar ${band}${selected}" data-trend-day="${index}" style="--h:${pct}%" aria-label="${escapeHTML(day.date)}, bite score ${day.score}">
+        <span class="trend-score">${day.score}</span>
+        <span class="trend-fill"></span>
+        <span class="trend-dow">${escapeHTML(dow)}</span>
+      </button>`;
+    }).join("");
+    chart.innerHTML = bars;
+    chart.querySelectorAll("[data-trend-day]").forEach((b) => b.addEventListener("click", () => selectDay(Number(b.dataset.trendDay), true)));
+
+    const ranked = week.map((d, i) => ({ d, i })).sort((a, b) => b.d.score - a.d.score);
+    const best = ranked[0];
+    const bestName = best.i === 0 ? "Today" : (best.d.date.split("·")[0] || best.d.label).trim();
+    const data = state.data[state.locationKey];
+    const wt = data?.waterTrend;
+    const wtBit = wt && wt.dir !== "steady" ? ` Water is ${wt.dir} (${wt.now}°F).` : (data?.water != null ? ` Water is holding near ${data.water}°F.` : "");
+    caption.textContent = `Best morning this week: ${bestName} at ${best.d.score}, window ${best.d.window}.${wtBit}`;
+
+    const legend = el("trend-watertemp");
+    if (legend) {
+      const now = data?.water ?? null;
+      const arrow = wt ? (wt.dir === "rising" ? " ↑" : wt.dir === "falling" ? " ↓" : "") : "";
+      legend.textContent = now != null ? `Water ${now}°F${arrow}` : "Water —°F";
+    }
+  }
+
+  async function fetchWaterTrend(location) {
+    const station = location.tempStation;
+    const response = await getJSON(`https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?product=water_temperature&application=gulfcoastbite&station=${station}&date=recent&units=english&time_zone=lst_ldt&format=json`);
+    const data = response?.data;
+    if (!data || data.length < 6) throw new Error("No water series");
+    const clean = data.filter((d) => d.v !== "" && !Number.isNaN(Number(d.v)));
+    if (clean.length < 6) throw new Error("Sparse water series");
+    const now = Number(clean[clean.length - 1].v);
+    const earlier = Number(clean[Math.max(0, clean.length - Math.min(clean.length - 1, 72))].v);
+    const delta = now - earlier;
+    return { now: Math.round(now), dir: delta >= 1.2 ? "rising" : delta <= -1.2 ? "falling" : "steady", delta: Math.round(delta * 10) / 10 };
+  }
+
+  // ── Your patterns (private journal analysis) ─────────────────────────────
+  const MONTH_ABBR = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  function topOf(counts) {
+    const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    return entries.length ? entries[0] : null;
+  }
+
+  function renderYourPatterns() {
+    const panel = el("your-patterns");
+    if (!panel) return;
+    const catches = state.catches || [];
+    if (catches.length < 3) { panel.hidden = true; return; }
+    panel.hidden = false;
+
+    const species = {}, spots = {};
+    let biggest = null;
+    const withCond = catches.filter((c) => c.conditions);
+    catches.forEach((c) => {
+      const sp = (c.species || "").trim(); if (sp) species[sp] = (species[sp] || 0) + 1;
+      const loc = (c.spot || "").trim(); if (loc) spots[loc] = (spots[loc] || 0) + 1;
+      const len = parseFloat(c.length);
+      if (Number.isFinite(len) && (!biggest || len > parseFloat(biggest.length))) biggest = c;
+    });
+
+    const tiles = [];
+    tiles.push(`<div><span>Logged</span><strong>${catches.length}</strong><small>catches</small></div>`);
+    const topSp = topOf(species);
+    if (topSp) tiles.push(`<div><span>Most caught</span><strong>${escapeHTML(topSp[0])}</strong><small>${topSp[1]}× logged</small></div>`);
+    const topSpot = topOf(spots);
+    if (topSpot) tiles.push(`<div><span>Best water</span><strong>${escapeHTML(topSpot[0])}</strong><small>${topSpot[1]} catches</small></div>`);
+    if (biggest) tiles.push(`<div><span>Personal best</span><strong>${escapeHTML(biggest.length)}"</strong><small>${escapeHTML(biggest.species)}</small></div>`);
+
+    // Condition patterns only appear once catches carry captured conditions.
+    let condLine = "";
+    if (withCond.length >= 3) {
+      const scores = withCond.map((c) => c.conditions.score).filter((s) => Number.isFinite(s));
+      const avgScore = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : null;
+      const moons = {}, winds = {}, tides = {}, months = {};
+      withCond.forEach((c) => {
+        const k = c.conditions;
+        if (k.moon) moons[k.moon] = (moons[k.moon] || 0) + 1;
+        if (k.windDir) winds[k.windDir] = (winds[k.windDir] || 0) + 1;
+        const tide = k.baroTrend ? k.baroTrend : null;
+        if (tide) tides[tide] = (tides[tide] || 0) + 1;
+        if (k.month) { const m = MONTH_ABBR[k.month - 1]; months[m] = (months[m] || 0) + 1; }
+      });
+      const bits = [];
+      if (avgScore != null) bits.push(`you catch on days scoring around <strong>${avgScore}</strong>`);
+      const tw = topOf(winds); if (tw && tw[1] >= 2) bits.push(`most often on a <strong>${tw[0]}</strong> wind`);
+      const tm = topOf(moons); if (tm && tm[1] >= 2) bits.push(`around the <strong>${tm[0].toLowerCase()}</strong>`);
+      const tmon = topOf(months); if (tmon && tmon[1] >= 2) bits.push(`your hot month is <strong>${tmon[0]}</strong>`);
+      if (bits.length) condLine = `<p class="patterns-insight">Your pattern so far: ${bits.join(", ")}.</p>`;
+    } else {
+      condLine = `<p class="patterns-insight patterns-building">Keep logging — once a few catches carry their conditions, this shows the tide, wind, and moon you catch best on.</p>`;
+    }
+
+    panel.innerHTML = `<div class="patterns-head"><p class="eyebrow">Your patterns</p></div><div class="patterns-tiles">${tiles.join("")}</div>${condLine}`;
+  }
+
+  // ── Location voice · makes the six waters read like six different places ─
+  const LOCATION_FLAVOR = {
+    pensacola: {
+      headlines: ["Bay's talking. Listen early.", "Three Mile kind of morning.", "Sound side. First light."],
+      lines: [
+        "Watch the shadow lines under Three Mile before the sun gets over the span.",
+        "If the bay chops up, the sound behind Pickens stays honest.",
+        "Bob Sikes gets picked over by 8; be the first one on the shadow line or skip it.",
+        "The East Bay grass drains hold bait even when the big bay is rolling.",
+        "Check the color change where the pass meets the bay; the clean side wins.",
+        "A slow troll down the Scenic Highway bluffs finds the schools the bridges miss."
+      ],
+      closers: ["The bay rewards the first boat, not the best one.", "If Three Mile is a parking lot, East Bay never is."]
+    },
+    perdido: {
+      headlines: ["Pass water. Go look.", "Old River morning.", "Johnson Beach is calling."],
+      lines: [
+        "The jetty seam at Perdido Pass sorts itself out about an hour into the push.",
+        "Boat traffic ruins Old River by 9; the docks fish best before the rentals wake up.",
+        "Walk Johnson Beach until you find the cut; don't cast until you do.",
+        "The Ono side stays clean when the pass gets washed out.",
+        "The flats behind the state park hold reds that never see the pass crowd.",
+        "Check the tide line at the Theo Baars bridge on your way in; it tells you the day."
+      ],
+      closers: ["The pass gives you one good hour. Be in position for it.", "When in doubt on the Key, fish shade and current and keep quiet."]
+    },
+    "orange-beach": {
+      headlines: ["Point's on. Move now.", "Canal morning. Stay tucked.", "Cotton Bayou early."],
+      lines: [
+        "Alabama Point clears first on the incoming; the color line is your starting gun.",
+        "The Ono canals are a fallback, not a consolation; big reds winter and summer both.",
+        "Watch for bait balls off Robinson Island as traffic pushes fish off the flats.",
+        "Terry Cove docks hold fish through the middle of the day when the pass dies.",
+        "Cotton Bayou's grass edge fishes best before the tour boats start their runs.",
+        "The rock line off the point taxes tackle; bring double leaders and go anyway."
+      ],
+      closers: ["Beat the charter fleet out or fish behind them; there's no in-between here.", "The point turns on fast and off faster. Stay ready to run."]
+    },
+    "gulf-shores": {
+      headlines: ["Lagoon first. Always.", "Pier's holding bait.", "Bon Secour backup."],
+      lines: [
+        "Little Lagoon Pass pinches all the current on the island; time the turn and be there.",
+        "Watch what the pier regulars are throwing before you rig; they've been on it since dawn.",
+        "The lagoon's west end mud warms first and wakes up first.",
+        "Bon Secour's river mouth saves the day every time the Gulf blows out.",
+        "The surf between the pier and the state park recuts after every storm; scout before you commit.",
+        "Fort Morgan's flats are a run, but they fish empty on weekdays."
+      ],
+      closers: ["The pier tells the truth about the beach. Walk it before you commit.", "When the Gulf says no, the lagoon usually says yes."]
+    },
+    mobile: {
+      headlines: ["Causeway rips are working.", "Delta water moving.", "Bay's flat. Run the rigs."],
+      lines: [
+        "The causeway rips show you exactly where the water is moving; fish the visible seams.",
+        "The gas rigs sort by wind; pick the rig with current pushing bait against the legs.",
+        "Birds over deep shell in the middle bay mean trout under them nine times out of ten.",
+        "The delta's warm-water outflows carry bait even on the ugliest days.",
+        "Dixey Bar is a sea state call; the fish are there, the question is whether you should be.",
+        "Watch the river stage; a rising Mobile River muddies the north bay before the south feels it."
+      ],
+      closers: ["This bay is big water; fish the piece of it that's moving, not the piece that's close.", "On Mobile Bay the birds do the scouting. Let them."]
+    },
+    dauphin: {
+      headlines: ["Bridge current's right.", "West end walk day.", "Back bays are clean."],
+      lines: [
+        "The bridge fishes in lanes; find the piling with current seam and shadow together.",
+        "The west end cuts re-carve after every blow; the newest cut is usually the fishiest.",
+        "Aloe Bay stays workable on a hard south wind when the front beach is lost.",
+        "Sand Island's bar line holds bull reds that the bridge crowd never sees.",
+        "The grass behind the island is the calm-day sight-fishing card; ease in, push pole or drift.",
+        "Check the Katrina Cut rocks on a moving tide; big fish patrol the rubble line."
+      ],
+      closers: ["The island fishes on current, period. No movement, no bite, no exceptions.", "One island, four fisheries. Pick by the wind, not by habit."]
+    }
+  };
+
+  function locationFlavor() {
+    return LOCATION_FLAVOR[state.locationKey] || null;
+  }
+
+  // ── Water watch · red tide status for local waters (FWC HAB samples) ─────
+  const HAB_QUERY_URL = "https://gis.myfwc.com/mapping/rest/services/Open_Data/Recent_Harmful_Algal_Bloom__HAB__Events_2024_present/MapServer/7/query";
+  // Bounding box: Dauphin Island to Navarre, nearshore band.
+  const HAB_BBOX = { xmin: -88.45, ymin: 29.9, xmax: -86.75, ymax: 30.75 };
+
+  function habSeverity(text) {
+    const t = String(text || "").toLowerCase();
+    if (/high/.test(t)) return 4;
+    if (/medium|moderate/.test(t)) return 3;
+    if (/low/.test(t)) return 2;
+    if (/very low|present|background/.test(t)) return 1;
+    if (/not present|not observed|none/.test(t)) return 0;
+    return 1;
+  }
+
+  async function fetchRedTide() {
+    const since = Date.now() - 30 * 864e5;
+    const params = new URLSearchParams({
+      where: "1=1",
+      geometry: JSON.stringify({ ...HAB_BBOX, spatialReference: { wkid: 4326 } }),
+      geometryType: "esriGeometryEnvelope",
+      inSR: "4326",
+      spatialRel: "esriSpatialRelIntersects",
+      outFields: "SAMPLE_DATE,LOCATION,NAME,COUNT_",
+      orderByFields: "SAMPLE_DATE DESC",
+      resultRecordCount: "60",
+      f: "json"
+    });
+    const response = await getJSON(`${HAB_QUERY_URL}?${params}`);
+    const rows = (response.features || []).map((f) => f.attributes)
+      .filter((a) => a.SAMPLE_DATE && a.SAMPLE_DATE >= since)
+      .filter((a) => /karenia/i.test(a.NAME || ""));
+    if (!rows.length) return { state: "clear", samples: 0 };
+    let worst = { severity: 0 };
+    rows.forEach((a) => {
+      const severity = habSeverity(a.COUNT_);
+      if (severity >= worst.severity) worst = { severity, location: a.LOCATION, count: a.COUNT_, when: a.SAMPLE_DATE };
+    });
+    return { state: worst.severity >= 2 ? "active" : "background", samples: rows.length, worst };
+  }
+
+  function renderWaterWatch() {
+    const box = el("water-watch");
+    if (!box) return;
+    const status = state.redTide;
+    if (!status) {
+      box.innerHTML = `<span class="ww-dot ww-unknown" aria-hidden="true"></span><div><strong>Red tide</strong><small>Checking FWC's latest local samples… <a href="https://myfwc.com/research/redtide/statewide/" target="_blank" rel="noopener">FWC statewide status ↗</a></small></div>`;
+      return;
+    }
+    if (status.error) {
+      box.innerHTML = `<span class="ww-dot ww-unknown" aria-hidden="true"></span><div><strong>Red tide</strong><small>Live sample feed unavailable. Check <a href="https://myfwc.com/research/redtide/statewide/" target="_blank" rel="noopener">FWC's statewide status ↗</a></small></div>`;
+      return;
+    }
+    if (status.state === "clear") {
+      box.innerHTML = `<span class="ww-dot ww-clear" aria-hidden="true"></span><div><strong>Red tide: none reported locally</strong><small>No Karenia brevis samples in Panhandle-area waters in FWC's last 30 days of data. <a href="https://myfwc.com/research/redtide/statewide/" target="_blank" rel="noopener">FWC status ↗</a></small></div>`;
+    } else if (status.state === "background") {
+      box.innerHTML = `<span class="ww-dot ww-back" aria-hidden="true"></span><div><strong>Red tide: background levels only</strong><small>${status.samples} recent local sample${status.samples === 1 ? "" : "s"}, none above low concentration. <a href="https://myfwc.com/research/redtide/statewide/" target="_blank" rel="noopener">FWC status ↗</a></small></div>`;
+    } else {
+      const when = status.worst?.when ? new Date(status.worst.when).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "";
+      box.innerHTML = `<span class="ww-dot ww-active" aria-hidden="true"></span><div><strong>Red tide detected in area sampling</strong><small>${escapeHTML(status.worst?.count || "Elevated")} — ${escapeHTML(status.worst?.location || "local waters")}${when ? " · " + when : ""}. Verify before fishing or wading: <a href="https://myfwc.com/research/redtide/statewide/" target="_blank" rel="noopener">FWC status ↗</a></small></div>`;
+    }
+  }
+
+  async function loadWaterWatch() {
+    if (!el("water-watch")) return;
+    try { state.redTide = await fetchRedTide(); }
+    catch { state.redTide = { error: true }; }
+    renderWaterWatch();
+  }
+
+  // ── Community leaderboard (last 30 days of shared catches) ──────────────
+  function renderLeaderboard(entries) {
+    const box = el("board-leaders");
+    if (!box) return;
+    const monthAgo = Date.now() - 30 * 864e5;
+    const recent = entries.filter((e) => new Date(e.at).getTime() > monthAgo);
+    if (recent.length < 3) { box.hidden = true; return; }
+    const byAngler = {};
+    let big = null;
+    recent.forEach((e) => {
+      const name = (e.name || "Angler").trim();
+      byAngler[name] = (byAngler[name] || 0) + 1;
+      const len = parseFloat(e.length);
+      if (Number.isFinite(len) && (!big || len > parseFloat(big.length))) big = e;
+    });
+    const top = Object.entries(byAngler).sort((a, b) => b[1] - a[1]).slice(0, 3);
+    box.hidden = false;
+    box.innerHTML = `<span class="leaders-label">This month on the board</span>
+      <div class="leaders-row">
+        ${top.map(([name, n], i) => `<div><span>${["Most catches", "Runner-up", "Third"][i]}</span><strong>${escapeHTML(name)}</strong><small>${n} shared</small></div>`).join("")}
+        ${big ? `<div><span>Biggest fish</span><strong>${escapeHTML(big.length)}" ${escapeHTML(big.species)}</strong><small>${escapeHTML(big.name)}</small></div>` : ""}
+      </div>`;
+  }
+
+  // ── Bite alert signup (interim transport: FormSubmit → owner inbox) ─────
+  function setupAlerts() {
+    const form = el("alerts-form");
+    if (!form) return;
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const status = el("alerts-status");
+      const email = el("alert-email").value.trim();
+      if (!email) return;
+      status.textContent = "Signing you up…";
+      fetch("https://formsubmit.co/ajax/r.mcgarryrandall@gmail.com", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          _subject: "Bite alert signup — " + el("alert-loc").value,
+          type: "bite-alert-signup",
+          email,
+          location: el("alert-loc").value,
+          mode: el("alert-mode").value,
+          page: location.href
+        })
+      }).then((r) => {
+        if (!r.ok) throw new Error("send failed");
+        form.reset();
+        status.textContent = "You're on the list. First alerts start rolling out this month.";
+      }).catch(() => {
+        status.textContent = "Couldn't sign you up just now — email r.mcgarryrandall@gmail.com and we'll add you by hand.";
+      });
+    });
+  }
+
   const state = {
     locationKey: "perdido",
+    redTide: null,
     dayIndex: 0,
     spotIndex: 0,
     status: "loading",
@@ -1355,14 +1748,15 @@
         });
       }
       if (!days.length) throw new Error("No forecast days returned");
-      const [wave, marineAlerts, baro, obsWind] = await Promise.all([
+      const [wave, marineAlerts, baro, obsWind, waterTrend] = await Promise.all([
         fetchWave(location.buoyStation).catch(() => fetchWaveFallback(location).catch(() => null)),
         fetchMarineAlerts(location.alertZones).catch(() => []),
         fetchBaro(location).catch(() => null),
-        fetchObservedWind(location).catch(() => null)
+        fetchObservedWind(location).catch(() => null),
+        fetchWaterTrend(location).catch(() => null)
       ]);
       if (obsWind && days[0]) days[0].wind = obsWind.label;
-      const result = { days, water, wave, marineAlerts, baro, baroTrend: baro?.trend || "steady", updated: new Date() };
+      const result = { days, water, wave, marineAlerts, baro, baroTrend: baro?.trend || "steady", waterTrend, updated: new Date() };
       state.data[key] = result;
       delete state.pending[key];
       return result;
@@ -1587,6 +1981,7 @@
     renderRegulations(location);
     renderOutlook(days);
     renderWeekly(location, days);
+    renderTrend(days);
     renderSeasonWatch(location);
     renderLiveLook();
     renderBaro();
@@ -1655,7 +2050,7 @@
   function readCatches() {
     try {
       const stored = JSON.parse(localStorage.getItem("gulf-coast-bite-catches") || "[]");
-      state.catches = Array.isArray(stored) ? stored.filter((item) => item && typeof item === "object").slice(0, 12) : [];
+      state.catches = Array.isArray(stored) ? stored.filter((item) => item && typeof item === "object").slice(0, 60) : [];
     } catch {
       state.catches = [];
     }
@@ -1667,6 +2062,7 @@
   }
 
   function renderCatches() {
+    renderYourPatterns();
     if (!state.catches.length) {
       el("catch-content").innerHTML = `<div class="empty-ledger"><span class="field-icon field-log-icon" aria-hidden="true">${FIELD_LOG_ICON}</span><div><h3>No catches logged yet.</h3><p>Your catches stay private on this device. Log the first fish to start learning your water.</p></div></div>`;
       return;
@@ -1729,9 +2125,10 @@
         region: location.short,
         length: String(form.get("length") || "—").trim() || "—",
         note: String(form.get("note") || "No field note").trim() || "No field note",
-        date: new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(new Date())
+        date: new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(new Date()),
+        conditions: captureConditions()
       });
-      state.catches = state.catches.slice(0, 12);
+      state.catches = state.catches.slice(0, 60);
       saveCatches();
       renderCatches();
       closeCatchModal();
@@ -1807,6 +2204,10 @@
     setupShareFields();
     loadBoard();
     window.setInterval(loadBoard, 5 * 60 * 1000);
+    setupAlerts();
+    renderWaterWatch();
+    loadWaterWatch();
+    window.setInterval(loadWaterWatch, 60 * 60 * 1000);
     setupScoreHelp();
     setupPrivacyChoice();
     setupNavigation();

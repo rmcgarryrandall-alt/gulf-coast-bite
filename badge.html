@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Gulf Coast Bite score badge</title>
+<style>
+  html,body{margin:0;padding:0;background:transparent}
+  .b{box-sizing:border-box;display:flex;align-items:center;gap:12px;width:100%;height:100%;min-height:64px;padding:10px 14px;background:#f3ebdd;border:1.5px solid #102a3a;border-radius:10px;font-family:Georgia,'Times New Roman',serif;color:#102a3a;text-decoration:none}
+  .ring{flex:none;width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:conic-gradient(#df5b43 var(--deg,0deg), #d8cdb6 0deg);position:relative}
+  .ring::after{content:"";position:absolute;inset:5px;border-radius:50%;background:#f3ebdd}
+  .ring b{position:relative;z-index:1;font-size:17px}
+  .t{line-height:1.25;min-width:0}
+  .t small{display:block;font-family:Arial,Helvetica,sans-serif;font-size:8.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8a6d4d}
+  .t strong{font-size:14px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .t span{font-family:Arial,Helvetica,sans-serif;font-size:10px;color:#4a616e}
+</style>
+</head>
+<body>
+<a class="b" id="badge" href="https://gulfcoastbite.com/?utm_source=badge" target="_blank" rel="noopener">
+  <span class="ring" id="ring"><b id="score">—</b></span>
+  <span class="t"><small>Today's bite score</small><strong id="place">Gulf Coast Bite</strong><span id="line">Loading live conditions…</span></span>
+</a>
+<script>
+(function(){
+  var LOCS={perdido:{n:"Perdido Key, FL",lat:30.294,lon:-87.44,t:"8730667"},pensacola:{n:"Pensacola Bay, FL",lat:30.4,lon:-87.21,t:"8729909"},"orange-beach":{n:"Orange Beach, AL",lat:30.27,lon:-87.57,t:"8730667"},"gulf-shores":{n:"Gulf Shores, AL",lat:30.246,lon:-87.7,t:"8731439"},mobile:{n:"Mobile Bay, AL",lat:30.44,lon:-88.01,t:"8735180"},dauphin:{n:"Dauphin Island, AL",lat:30.251,lon:-88.109,t:"8735180"}};
+  var key=(new URLSearchParams(location.search).get("loc")||"perdido").toLowerCase();
+  var loc=LOCS[key]||LOCS.perdido;
+  document.getElementById("place").textContent=loc.n;
+  function pad(n){return n<10?"0"+n:""+n}
+  var d=new Date(),ds=""+d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate());
+  function j(u){return fetch(u).then(function(r){if(!r.ok)throw 0;return r.json()})}
+  Promise.all([
+    j("https://api.weather.gov/points/"+loc.lat+","+loc.lon).then(function(p){return j(p.properties.forecast)}),
+    j("https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?product=predictions&application=gulfcoastbite-badge&station="+loc.t+"&begin_date="+ds+"&range=24&datum=MLLW&units=english&time_zone=lst_ldt&interval=30&format=json")
+  ]).then(function(res){
+    var daily=res[0],curve=res[1];
+    var iso=d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+    var period=null,ps=daily.properties.periods;
+    for(var i=0;i<ps.length;i++){if(ps[i].isDaytime&&ps[i].startTime.slice(0,10)===iso){period=ps[i];break}}
+    if(!period)period=ps[0];
+    var vals=(curve.predictions||[]).map(function(p){return Number(p.v)});
+    var range=vals.length?Math.max.apply(null,vals)-Math.min.apply(null,vals):1.2;
+    var wind=Number((period.windSpeed||"8").match(/\d+/)[0]||8);
+    var text=(period.shortForecast||"").toLowerCase();
+    var tide=Math.round(Math.max(6,Math.min(40,24*range)));
+    var w=wind<=7?35:Math.round(Math.max(4,35-(wind-7)*2.4));
+    var sky=/thunder|storm/.test(text)?4:/heavy rain/.test(text)?8:/rain|showers|drizzle/.test(text)?12:/partly|mostly cloudy|overcast|broken|cloud/.test(text)?25:/sunny|clear|fair/.test(text)?18:16;
+    sky=Math.max(0,Math.round(sky-.12*(period.probabilityOfPrecipitation&&period.probabilityOfPrecipitation.value||0)));
+    var score=Math.max(15,Math.min(97,tide+w+sky));
+    document.getElementById("score").textContent=score;
+    document.getElementById("ring").style.setProperty("--deg",(3.6*score)+"deg");
+    document.getElementById("line").textContent=(period.shortForecast||"").split(/ then /i)[0]+" · wind "+wind+" mph";
+    document.getElementById("badge").href="https://gulfcoastbite.com/?utm_source=badge&loc="+key;
+  }).catch(function(){
+    document.getElementById("line").textContent="Live conditions at gulfcoastbite.com";
+  });
+})();
+</script>
+</body>
+</html>
