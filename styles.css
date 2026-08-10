@@ -717,3 +717,78 @@ header nav a { white-space: nowrap; }
 .leaders-row small { display: block; color: #102a3a99; font-size: 11px; }
 
 @media (max-width: 900px) { .planning-grid { grid-template-columns: 1fr; } }
+
+/* ── Mobile cleanup pass · 2026-08-10 ─────────────────────────────────── */
+/* Journal quote: kill the browser's default indent everywhere */
+.journal-note blockquote { margin: 0 0 6px; }
+
+/* Smooth horizontal scrollers snap to buttons */
+.region-bar > div, .day-buttons { scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; }
+.region-bar button, .day-buttons button { scroll-snap-align: start; }
+
+@media (max-width: 720px) {
+  /* Target card: long species names (Mangrove snapper, Spanish mackerel) */
+  .target-card h2 { font-size: clamp(24px, 7.4vw, 32px); margin: 2px 0 6px; }
+  .target-card .fish-stamp, .fish-stamp { width: min(64%, 210px); }
+  .target-card p#target-bait { margin-top: 2px; }
+  .target-card .target-why { font-size: 12px; max-width: 270px; }
+
+  /* Trend: stack the heading, shrink labels, tighten height */
+  .trend-section { padding: 30px 0 34px; }
+  .trend-heading { flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 20px; }
+  .trend-legend { padding-bottom: 0; }
+  .trend-chart { height: 148px; gap: 5px; }
+  .trend-bar .trend-score { font-size: 12px; }
+  .trend-bar .trend-dow { font-size: 7.5px; letter-spacing: .03em; }
+  .trend-caption { font-size: 14px; margin-top: 14px; }
+
+  /* Ledger/board headings: stop the button wrapping into a corner */
+  .ledger-heading { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .ledger-heading h2 { font-size: clamp(34px, 9.5vw, 44px); }
+  .ledger-heading button { align-self: flex-start; }
+
+  /* Live look: close the dead gap between sections */
+  .livelook-section { padding: 0 0 26px; }
+  .livelook-section .section-heading span { font-size: 9px; letter-spacing: .1em; }
+  .regulations-section { margin-top: 26px; }
+
+  /* Patterns tiles: smaller numerals so long spot names breathe */
+  .patterns-tiles strong { font-size: 21px; }
+  .your-patterns { padding: 16px 16px; }
+  .patterns-insight { font-size: 14px; }
+
+  .community-board { border-top: 0; }
+
+  /* Board leaderboard + catch of the week */
+  .board-leaders { padding: 14px 16px; }
+  .leaders-row { gap: 12px; }
+  .leaders-row strong { font-size: 16px; }
+  .catch-week { padding: 16px; gap: 14px; }
+  .catch-week h3 { font-size: 22px; }
+
+  /* Season watch: tighter rhythm */
+  .season-watch { padding: 34px 0 32px; }
+  .season-columns { margin-top: 20px; }
+  .season-columns li { font-size: 15px; }
+  .season-note, .season-tip { font-size: 14px; }
+
+  /* Water watch */
+  .water-watch { padding: 12px 14px; margin: 16px 0 2px; }
+  .water-watch strong { font-size: 15px; }
+  .water-watch small { font-size: 11.5px; }
+
+  /* Alerts card + install chip */
+  .alerts-card { padding: 20px 18px; }
+  .alerts-row { grid-template-columns: 1fr; }
+  .install-chip { margin: 10px 0 0; }
+
+  /* Weekly narrative inside outlook card */
+  .weekly-summary { margin: -8px 0 22px; font-size: 14px; }
+}
+
+@media (max-width: 400px) {
+  .target-card h2 { font-size: clamp(22px, 7vw, 26px); }
+  .trend-chart { height: 132px; }
+  .patterns-tiles { gap: 10px; }
+  .patterns-tiles strong { font-size: 18px; }
+}
